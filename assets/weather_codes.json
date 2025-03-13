@@ -1,0 +1,282 @@
+{
+    "0": {
+        "day": {
+            "description": "Soleggiato",
+            "image": "http://openweathermap.org/img/wn/01d@2x.png"
+        },
+        "night": {
+            "description": "Sereno",
+            "image": "http://openweathermap.org/img/wn/01n@2x.png"
+        }
+    },
+    "1": {
+        "day": {
+            "description": "Prevalentemente soleggiato",
+            "image": "http://openweathermap.org/img/wn/01d@2x.png"
+        },
+        "night": {
+            "description": "Prevalentemente sereno",
+            "image": "http://openweathermap.org/img/wn/01n@2x.png"
+        }
+    },
+    "2": {
+        "day": {
+            "description": "Parzialmente nuvoloso",
+            "image": "http://openweathermap.org/img/wn/02d@2x.png"
+        },
+        "night": {
+            "description": "Parzialmente nuvoloso",
+            "image": "http://openweathermap.org/img/wn/02n@2x.png"
+        }
+    },
+    "3": {
+        "day": {
+            "description": "Nuvoloso",
+            "image": "http://openweathermap.org/img/wn/03d@2x.png"
+        },
+        "night": {
+            "description": "Nuvoloso",
+            "image": "http://openweathermap.org/img/wn/03n@2x.png"
+        }
+    },
+    "45": {
+        "day": {
+            "description": "Nebbia",
+            "image": "http://openweathermap.org/img/wn/50d@2x.png"
+        },
+        "night": {
+            "description": "Nebbia",
+            "image": "http://openweathermap.org/img/wn/50n@2x.png"
+        }
+    },
+    "48": {
+        "day": {
+            "description": "Nebbia da brina",
+            "image": "http://openweathermap.org/img/wn/50d@2x.png"
+        },
+        "night": {
+            "description": "Nebbia da brina",
+            "image": "http://openweathermap.org/img/wn/50n@2x.png"
+        }
+    },
+    "51": {
+        "day": {
+            "description": "Pioviggine leggera",
+            "image": "http://openweathermap.org/img/wn/09d@2x.png"
+        },
+        "night": {
+            "description": "Pioviggine leggera",
+            "image": "http://openweathermap.org/img/wn/09n@2x.png"
+        }
+    },
+    "53": {
+        "day": {
+            "description": "Pioviggine",
+            "image": "http://openweathermap.org/img/wn/09d@2x.png"
+        },
+        "night": {
+            "description": "Pioviggine",
+            "image": "http://openweathermap.org/img/wn/09n@2x.png"
+        }
+    },
+    "55": {
+        "day": {
+            "description": "Pioviggine intensa",
+            "image": "http://openweathermap.org/img/wn/09d@2x.png"
+        },
+        "night": {
+            "description": "Pioviggine intensa",
+            "image": "http://openweathermap.org/img/wn/09n@2x.png"
+        }
+    },
+    "56": {
+        "day": {
+            "description": "Pioviggine gelata leggera",
+            "image": "http://openweathermap.org/img/wn/09d@2x.png"
+        },
+        "night": {
+            "description": "Pioviggine gelata leggera",
+            "image": "http://openweathermap.org/img/wn/09n@2x.png"
+        }
+    },
+    "57": {
+        "day": {
+            "description": "Pioviggine gelata",
+            "image": "http://openweathermap.org/img/wn/09d@2x.png"
+        },
+        "night": {
+            "description": "Pioviggine gelata",
+            "image": "http://openweathermap.org/img/wn/09n@2x.png"
+        }
+    },
+    "61": {
+        "day": {
+            "description": "Pioggia leggera",
+            "image": "http://openweathermap.org/img/wn/10d@2x.png"
+        },
+        "night": {
+            "description": "Pioggia leggera",
+            "image": "http://openweathermap.org/img/wn/10n@2x.png"
+        }
+    },
+    "63": {
+        "day": {
+            "description": "Pioggia",
+            "image": "http://openweathermap.org/img/wn/10d@2x.png"
+        },
+        "night": {
+            "description": "Pioggia",
+            "image": "http://openweathermap.org/img/wn/10n@2x.png"
+        }
+    },
+    "65": {
+        "day": {
+            "description": "Pioggia intensa",
+            "image": "http://openweathermap.org/img/wn/10d@2x.png"
+        },
+        "night": {
+            "description": "Pioggia intensa",
+            "image": "http://openweathermap.org/img/wn/10n@2x.png"
+        }
+    },
+    "66": {
+        "day": {
+            "description": "Pioggia gelata leggera",
+            "image": "http://openweathermap.org/img/wn/10d@2x.png"
+        },
+        "night": {
+            "description": "Pioggia gelata leggera",
+            "image": "http://openweathermap.org/img/wn/10n@2x.png"
+        }
+    },
+    "67": {
+        "day": {
+            "description": "Pioggia gelata",
+            "image": "http://openweathermap.org/img/wn/10d@2x.png"
+        },
+        "night": {
+            "description": "Pioggia gelata",
+            "image": "http://openweathermap.org/img/wn/10n@2x.png"
+        }
+    },
+    "71": {
+        "day": {
+            "description": "Neve leggera",
+            "image": "http://openweathermap.org/img/wn/13d@2x.png"
+        },
+        "night": {
+            "description": "Neve leggera",
+            "image": "http://openweathermap.org/img/wn/13n@2x.png"
+        }
+    },
+    "73": {
+        "day": {
+            "description": "Neve",
+            "image": "http://openweathermap.org/img/wn/13d@2x.png"
+        },
+        "night": {
+            "description": "Neve",
+            "image": "http://openweathermap.org/img/wn/13n@2x.png"
+        }
+    },
+    "75": {
+        "day": {
+            "description": "Neve intensa",
+            "image": "http://openweathermap.org/img/wn/13d@2x.png"
+        },
+        "night": {
+            "description": "Neve intensa",
+            "image": "http://openweathermap.org/img/wn/13n@2x.png"
+        }
+    },
+    "77": {
+        "day": {
+            "description": "Grani di neve",
+            "image": "http://openweathermap.org/img/wn/13d@2x.png"
+        },
+        "night": {
+            "description": "Grani di neve",
+            "image": "http://openweathermap.org/img/wn/13n@2x.png"
+        }
+    },
+    "80": {
+        "day": {
+            "description": "Rovesci leggeri",
+            "image": "http://openweathermap.org/img/wn/09d@2x.png"
+        },
+        "night": {
+            "description": "Rovesci leggeri",
+            "image": "http://openweathermap.org/img/wn/09n@2x.png"
+        }
+    },
+    "81": {
+        "day": {
+            "description": "Rovesci",
+            "image": "http://openweathermap.org/img/wn/09d@2x.png"
+        },
+        "night": {
+            "description": "Rovesci",
+            "image": "http://openweathermap.org/img/wn/09n@2x.png"
+        }
+    },
+    "82": {
+        "day": {
+            "description": "Rovesci intensi",
+            "image": "http://openweathermap.org/img/wn/09d@2x.png"
+        },
+        "night": {
+            "description": "Rovesci intensi",
+            "image": "http://openweathermap.org/img/wn/09n@2x.png"
+        }
+    },
+    "85": {
+        "day": {
+            "description": "Rovesci di neve leggeri",
+            "image": "http://openweathermap.org/img/wn/13d@2x.png"
+        },
+        "night": {
+            "description": "Rovesci di neve leggeri",
+            "image": "http://openweathermap.org/img/wn/13n@2x.png"
+        }
+    },
+    "86": {
+        "day": {
+            "description": "Rovesci di neve",
+            "image": "http://openweathermap.org/img/wn/13d@2x.png"
+        },
+        "night": {
+            "description": "Rovesci di neve",
+            "image": "http://openweathermap.org/img/wn/13n@2x.png"
+        }
+    },
+    "95": {
+        "day": {
+            "description": "Temporale",
+            "image": "http://openweathermap.org/img/wn/11d@2x.png"
+        },
+        "night": {
+            "description": "Temporale",
+            "image": "http://openweathermap.org/img/wn/11n@2x.png"
+        }
+    },
+    "96": {
+        "day": {
+            "description": "Temporali leggeri con grandine",
+            "image": "http://openweathermap.org/img/wn/11d@2x.png"
+        },
+        "night": {
+            "description": "Temporali leggeri con grandine",
+            "image": "http://openweathermap.org/img/wn/11n@2x.png"
+        }
+    },
+    "99": {
+        "day": {
+            "description": "Temporale con grandine",
+            "image": "http://openweathermap.org/img/wn/11d@2x.png"
+        },
+        "night": {
+            "description": "Temporale con grandine",
+            "image": "http://openweathermap.org/img/wn/11n@2x.png"
+        }
+    }
+}

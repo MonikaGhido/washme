@@ -1,122 +1,221 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:flutter/services.dart' show rootBundle;
 
-void main() {
+void main(){
   runApp(const MyApp());
+}
+
+// String formatDate(String date) {
+//   DateTime parsedDate = DateTime.parse(date);
+//   return DateFormat('EEEE d MMMM', 'it').format(parsedDate);
+// }
+
+String formatDate(String date) {
+  DateTime parsedDate = DateTime.parse(date);
+
+  // Mappa per convertire i giorni della settimana in italiano
+  List<String> giorniSettimana = [
+    "Domenica", "Lunedì", "Martedì", "Mercoledì", "Giovedì", "Venerdì", "Sabato"
+  ];
+
+  // Mappa per convertire i mesi in italiano
+  List<String> mesi = [
+    "Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno",
+    "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"
+  ];
+
+  String giornoSettimana = giorniSettimana[parsedDate.weekday % 7];
+  String mese = mesi[parsedDate.month - 1];
+  String giorno = parsedDate.day.toString();
+
+  return "$giornoSettimana $giorno $mese";
+}
+
+
+Future<Map<String, dynamic>> getWeatherCodeDescriptions() async {
+  final String response = await rootBundle.loadString('assets/weather_codes.json');
+  final Map<String, dynamic> jsonData = jsonDecode(response);
+  return jsonData;
+}
+
+Future<Map<String, double>> getCoordinates(String city) async {
+  final url = 'https://nominatim.openstreetmap.org/search?city=$city&format=json';
+  final response = await http.get(Uri.parse(url));
+
+  if (response.statusCode == 200) {
+    final List<dynamic> data = jsonDecode(response.body);
+    if (data.isNotEmpty) {
+      return {
+        'latitude': double.parse(data[0]['lat']),
+        'longitude': double.parse(data[0]['lon'])
+      };
+    }
+  }
+  throw Exception('Errore nel recupero delle coordinate per $city');
+}
+
+Future<Map<String, dynamic>> getWeatherData(String city) async {
+  final coords = await getCoordinates(city);
+  final url = 'https://api.open-meteo.com/v1/forecast?latitude=${coords['latitude']}&longitude=${coords['longitude']}&daily=rain_sum,precipitation_probability_max,weather_code&timezone=auto&forecast_days=14';
+
+  final response = await http.get(Uri.parse(url));
+  if (response.statusCode == 200) {
+    return jsonDecode(response.body);
+  } else {
+    throw Exception('Errore caricamento dati meteo');
+  }
+}
+
+Future<Map<String, dynamic>> confrontaLocalita(String city1, String city2) async {
+  final datiCitta1 = await getWeatherData(city1);
+  final datiCitta2 = await getWeatherData(city2);
+
+  final giorni = datiCitta1['daily']['time'].map<String>((date) => formatDate(date)).toList();
+  final pioggiaCitta1 = datiCitta1['daily']['precipitation_probability_max'];
+  final pioggiaCitta2 = datiCitta2['daily']['precipitation_probability_max'];
+  final weatherCodes = datiCitta1['daily']['weather_code'];
+
+  String giornoMigliore = '';
+  double punteggioMigliore = double.infinity;
+  int bestIndex = 0;
+
+  for (int i = 0; i < giorni.length - 5; i++) {
+    double sommaPioggia = 0.0;
+    for (int j = i; j <= i + 5; j++) {
+      sommaPioggia += pioggiaCitta1[j] + pioggiaCitta2[j];
+    }
+
+    double mediaPioggia = sommaPioggia / 12;
+
+    if (mediaPioggia < punteggioMigliore) {
+      punteggioMigliore = mediaPioggia;
+      giornoMigliore = giorni[i];
+      bestIndex = i;
+    }
+  }
+
+  bool troppaPioggia = false;
+  for (int i = bestIndex; i < bestIndex + 6 && i < giorni.length; i++) {
+    if (pioggiaCitta1[i] > 40 || pioggiaCitta2[i] > 40) {
+      troppaPioggia = true;
+      break;
+    }
+  }
+
+  return {
+    'giornoMigliore': giornoMigliore,
+    'previsioni': giorni,
+    'weatherCodes': weatherCodes,
+    'pioggiaCitta1': pioggiaCitta1,
+    'troppaPioggia': troppaPioggia,
+    'primaCitta': city1,
+  };
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'WashMe',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const HomeScreen(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        backgroundColor: Colors.blue,
+        title: const Text('WashMe 🌦️', style: TextStyle(fontWeight: FontWeight.bold)),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
+      body: FutureBuilder(
+        future: Future.wait([
+          confrontaLocalita('Casalbuttano ed Uniti', 'Trescore Balneario'),
+          getWeatherCodeDescriptions(),
+        ]),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('😵 Errore: ${snapshot.error}'));
+          }
+
+          final data = snapshot.data![0];
+          final bestDay = data['giornoMigliore'];
+          final giorni = data['previsioni'];
+          final troppaPioggia = data['troppaPioggia'];
+          final primaCitta = data['primaCitta'];
+          final weatherCodes = data['weatherCodes'];
+          final precipitation = data['pioggiaCitta1'];
+          final weatherDescriptions = snapshot.data![1];
+
+          return Column(
+            children: [
+              const SizedBox(height: 30),
+              Card(
+                elevation: 4,
+                color: Colors.blue.shade100,
+                child: Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(Icons.local_car_wash, size: 60, color: Colors.blue),
+                      const SizedBox(height: 10),
+                      const Text('Giorno ideale per lavare la macchina:',
+                          style: TextStyle(fontSize: 18)),
+                      const SizedBox(height: 10),
+                      Text(bestDay,
+                          style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold)),
+                      if (troppaPioggia)
+                        const Padding(
+                          padding: EdgeInsets.only(top: 10),
+                          child: Text(
+                            '💦 Attenzione! Forse è meglio aspettare, sembra che pioverà troppo!',
+                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.red),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                     ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              Text('Meteo $primaCitta:', textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500)),
+              const SizedBox(height: 10),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: giorni.length,
+                  itemBuilder: (context, index) {
+                    String code = weatherCodes[index].toString();
+                    String description = weatherDescriptions[code]['day']['description'] ?? "Dato non disponibile";
+                    String iconUrl = weatherDescriptions[code]['day']['image'] ?? "";
+                    return ListTile(
+                      leading: iconUrl.isNotEmpty ? Image.network(iconUrl) : const Icon(Icons.wb_cloudy),
+                      title: Text(giorni[index],
+                          style: TextStyle(fontWeight: giorni[index] == bestDay ? FontWeight.bold : FontWeight.normal)),
+                      subtitle: Text('$description, 🌧️ ${precipitation[index]}%'),
+                    );
+                  },
+                ),
+              ),
+            ],
+          );
+        },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
